@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKER_HUB_CREDENTIALS = 'docker-hub-credentials'
-        SSH_CREDENTIALS = 'ssh-credentials'
+//         SSH_CREDENTIALS = 'ssh-credentials'
         DOCKER_IMAGE = "jay11233/appv2-web"
         DOCKER_REGISTRY_URL = "https://index.docker.io/v1/"
         GITHUB_CREDENTIALS = credentials('github-credentials')
@@ -53,9 +53,9 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                sshagent(['SSH_CREDENTIALS']) {
+                sshagent(['ssh-credentials']) {
                     sh """
-                    ssh -i /Users/jay/Downloads/web.pem ec2-user@ec2-3-141-196-190.us-east-2.compute.amazonaws.com << EOF
+                    ssh ec2-user@ec2-3-141-196-190.us-east-2.compute.amazonaws.com << EOF
                     cd /home/ec2-user
                     docker-compose -f /home/ec2-user/docker-compose.yml down
                     docker-compose -f /home/ec2-user/docker-compose.yml pull web
