@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKER_HUB_CREDENTIALS = credentials('docker-hub-credentials')
+        DOCKER_HUB_CREDENTIALS = 'docker-hub-credentials'
         SSH_CREDENTIALS = credentials('ssh-credentials')
         DOCKER_IMAGE = "josw90/appv2-web:latest"
         DOCKER_REGISTRY_URL = "https://index.docker.io/v1/"
@@ -42,7 +42,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "{env.DOCKER_HUB_CREDENTIALS}") {
+                    docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "${DOCKER_HUB_CREDENTIALS}") {
 
                         sh "docker push ${env.DOCKER_IMAGE}"
 
