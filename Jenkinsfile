@@ -42,7 +42,7 @@ pipeline {
         stage('Push Docker Image') {
             steps {
                 script {
-                    docker.withRegistry("${env.DOCKER_REGISTRY_URL}", 'DOCKER_HUB_CREDENTIALS') {
+                    docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "{env.DOCKER_HUB_CREDENTIALS}") {
 
                         sh "docker push ${env.DOCKER_IMAGE}"
 
