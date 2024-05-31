@@ -53,7 +53,7 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                sshagent(['ssh-credentials']) {
+                sshagent(credentials: ['ssh-credentials']) {
                     sh """
                     ssh ec2-user@ec2-3-141-196-190.us-east-2.compute.amazonaws.com << EOF
                     cd /home/ec2-user
