@@ -27,7 +27,13 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    dockerImage = docker.build("${env.DOCKER_IMAGE}", ".")
+
+                     sh 'docker buildx create --use'
+                     sh 'docker buildx build --platform linux/amd64 -t ${env.DOCKER_IMAGE} . --push'
+
+
+
+//                     dockerImage = docker.build("${env.DOCKER_IMAGE}", ".")
                 }
             }
         }
