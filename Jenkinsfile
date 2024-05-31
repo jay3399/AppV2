@@ -29,10 +29,12 @@ pipeline {
                 script {
 
 
-                    sh 'docker-compose -f docker-compose.jenkins.yml build'
 
 
-//                     dockerImage = docker.build("${env.DOCKER_IMAGE}", ".")
+                    dockerImage = docker.build("${env.DOCKER_IMAGE}", ".")
+
+
+
                 }
             }
         }
@@ -44,7 +46,6 @@ pipeline {
 
                         sh "docker push ${env.DOCKER_IMAGE}"
 
-//                         sh 'docker-compose -f docker-compose.jenkins.yml push'
                     }
                 }
             }
