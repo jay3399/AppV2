@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_HUB_CREDENTIALS = 'docker-hub-credentials'
         SSH_CREDENTIALS = credentials('ssh-credentials')
-        DOCKER_IMAGE = "josw90/appv2-web:latest"
+        DOCKER_IMAGE = "jay11233/appv2-web"
         DOCKER_REGISTRY_URL = "https://index.docker.io/v1/"
         GITHUB_CREDENTIALS = credentials('github-credentials')
 
