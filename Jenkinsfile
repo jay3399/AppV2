@@ -31,7 +31,7 @@ pipeline {
 
 
 
-                    dockerImage = docker.build("${env.DOCKER_IMAGE}", ".")
+                    dockerImage = docker.build("${DOCKER_IMAGE}", ".")
 
 
 
@@ -44,7 +44,7 @@ pipeline {
                 script {
                     docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "${DOCKER_HUB_CREDENTIALS}") {
 
-                        sh "docker push ${env.DOCKER_IMAGE}"
+                        sh "docker push ${DOCKER_IMAGE}"
 
                     }
                 }
