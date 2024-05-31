@@ -28,9 +28,8 @@ pipeline {
             steps {
                 script {
 
-                     sh 'docker buildx create --use'
-                     sh 'docker buildx build --platform linux/amd64 -t ${env.DOCKER_IMAGE} . --push'
 
+                    sh 'docker-compose -f docker-compose.jenkins.yml build'
 
 
 //                     dockerImage = docker.build("${env.DOCKER_IMAGE}", ".")
@@ -42,7 +41,10 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry("${env.DOCKER_REGISTRY_URL}", 'DOCKER_HUB_CREDENTIALS') {
-                        dockerImage.push()
+
+                        sh "docker push ${env.DOCKER_IMAGE}"
+
+//                         sh 'docker-compose -f docker-compose.jenkins.yml push'
                     }
                 }
             }
