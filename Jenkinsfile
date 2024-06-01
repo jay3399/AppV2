@@ -28,19 +28,15 @@ pipeline {
 
         stage('Setup Docker Buildx') {
                     steps {
-                        sh 'docker buildx create --use'
-                        sh 'docker buildx inspect --bootstrap'
+                       sh 'docker buildx create --name mybuilder'
+                       sh 'docker buildx use mybuilder'
+                       sh 'docker buildx inspect --bootstrap'
                     }
         }
 
         stage('Build Docker Image') {
                     steps {
-                        script {
-                            dockerImage = sh(script: """
-                                docker buildx build --platform linux/amd64,linux/arm64 \
-                                -t ${DOCKER_IMAGE} . --push
-                            """, returnStdout: true).trim()
-                        }
+                         script { sh "docker buildx build --platform linux/amd64,linux/arm64 -t ${DOCKER_IMAGE} . --push" }
                     }
         }
 
