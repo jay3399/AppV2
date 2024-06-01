@@ -25,11 +25,21 @@ pipeline {
         }
 
 
+        stage('Install Docker Buildx') {
+                    steps {
+                        sh '''
+                        mkdir -p ~/.docker/cli-plugins/
+                        curl -SL https://github.com/docker/buildx/releases/download/v0.8.2/buildx-v0.8.2.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
+                        chmod +x ~/.docker/cli-plugins/docker-buildx
+                        docker buildx version
+                        '''
+                    }
+                }
+
 
         stage('Setup Docker Buildx') {
                     steps {
-                       sh 'docker buildx create --name mybuilder'
-                       sh 'docker buildx use mybuilder'
+                       sh 'docker buildx create --name mybuilder --use'
                        sh 'docker buildx inspect --bootstrap'
                     }
         }
