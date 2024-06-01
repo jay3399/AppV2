@@ -24,32 +24,27 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
 
 
-
-
-                    dockerImage = docker.build("${DOCKER_IMAGE}", ".")
-
-
-
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "${DOCKER_HUB_CREDENTIALS}") {
-
-                        sh "docker push ${DOCKER_IMAGE}"
-
+        stage('Setup Docker Buildx') {
+                    steps {
+                        sh 'docker buildx create --use'
+                        sh 'docker buildx inspect --bootstrap'
                     }
-                }
-            }
         }
+
+        stage('Build Docker Image') {
+                    steps {
+                        script {
+                            dockerImage = sh(script: """
+                                docker buildx build --platform linux/amd64,linux/arm64 \
+                                -t ${DOCKER_IMAGE} . --push
+                            """, returnStdout: true).trim()
+                        }
+                    }
+        }
+
+
 
         stage('Deploy to EC2') {
             steps {
