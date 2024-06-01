@@ -55,7 +55,7 @@ pipeline {
             steps {
                 sshagent(['ssh-credentials']) {
                     sh """
-                    ssh ec2-user@ec2-3-141-196-190.us-east-2.compute.amazonaws.com << EOF
+                    ssh -o StrictHostKeyChecking=no ec2-user@ec2-3-141-196-190.us-east-2.compute.amazonaws.com << EOF
                     cd /home/ec2-user
                     docker-compose -f /home/ec2-user/docker-compose.yml down
                     docker-compose -f /home/ec2-user/docker-compose.yml pull web
