@@ -4,7 +4,7 @@ pipeline {
     environment {
         DOCKER_HUB_CREDENTIALS = 'docker-hub-credentials'
 //         SSH_CREDENTIALS = 'ssh-credentials'
-        DOCKER_IMAGE = "jay11233/appv2-web"
+        DOCKER_IMAGE = "jay11233/appv2-web2"
         DOCKER_REGISTRY_URL = "https://index.docker.io/v1/"
         GITHUB_CREDENTIALS = credentials('github-credentials')
 
@@ -46,7 +46,10 @@ pipeline {
 
         stage('Build Docker Image') {
                     steps {
-                         script { sh "docker buildx build --platform linux/amd64,linux/arm64 -t ${DOCKER_IMAGE} . --push" }
+                         script {
+                             docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "${DOCKER_HUB_CREDENTIALS}") {
+                             sh "docker buildx build --platform linux/amd64,linux/arm64 -t ${DOCKER_IMAGE} . --push"  }
+                         }
                     }
         }
 
