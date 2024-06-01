@@ -24,32 +24,40 @@ pipeline {
             }
         }
 
-        stage('Build Docker Image') {
-            steps {
-                script {
+  stage('Build Docker Image') {
+      steps {
+          script {
+
+
+
+           docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "${DOCKER_HUB_CREDENTIALS}") {
+                  dockerImage = docker.buildx.build(
+                      "--platform", "linux/amd64,linux/arm64",
+                      "--build-arg", "TARGETPLATFORM=linux/amd64",
+                      "-t", "${DOCKER_IMAGE}:latest",
+                      ".",
+                      "--push"
+                  )
 
 
 
 
-                    dockerImage = docker.build("${DOCKER_IMAGE}", ".")
 
+          }
+      }
+  }
 
-
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
-            steps {
-                script {
-                    docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "${DOCKER_HUB_CREDENTIALS}") {
-
-                        sh "docker push ${DOCKER_IMAGE}"
-
-                    }
-                }
-            }
-        }
+//         stage('Push Docker Image') {
+//             steps {
+//                 script {
+//                     docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "${DOCKER_HUB_CREDENTIALS}") {
+//
+//                         sh "docker push ${DOCKER_IMAGE}"
+//
+//                     }
+//                 }
+//             }
+//         }
 
         stage('Deploy to EC2') {
             steps {
