@@ -55,7 +55,7 @@ pipeline {
                     docker-compose -f /home/ec2-user/docker-compose.yml down
                     docker-compose -f /home/ec2-user/docker-compose.yml pull web
                     docker-compose -f /home/ec2-user/docker-compose.yml up -d
-                    EOF
+EOF
                     """
                 }
             }
