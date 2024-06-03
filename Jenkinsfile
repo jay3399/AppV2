@@ -27,35 +27,15 @@ pipeline {
         }
 
 
-        stage('Install Docker Compose') {
-                    steps {
-                        sh '''
-                curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /tmp/docker-compose
-                              chmod +x /tmp/docker-compose
-                              mv /tmp/docker-compose /usr/local/bin/docker-compose
-                        docker-compose --version
-                        '''
-                    }
-                }
 
-
-        stage('Build Docker Image') {
-            steps {
-                script {
-
-                    dockerImage = docker.build("${DOCKER_IMAGE}", ".")
-
-                }
-            }
-        }
-
-        stage('Push Docker Image') {
+        stage('Build & Push Docker Image') {
             steps {
                 script {
                     docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "${DOCKER_HUB_CREDENTIALS}") {
-
-                        sh "docker push ${DOCKER_IMAGE}"
-
+                        sh '''
+                        docker-compose -f docker-compose_jenkins.yml build
+                        docker-compose -f docker-compose_jenkins.yml push
+                        '''
                     }
                 }
             }
