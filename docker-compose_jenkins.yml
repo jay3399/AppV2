@@ -4,8 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        - DOCKER_REGISTRY_URL=https://index.docker.io/v1/
+    image: jay11233/appv2-web2:latest
     ports:
       - "8081:8081"
     platform: linux/amd64
