@@ -7,7 +7,7 @@ pipeline {
         DOCKER_IMAGE = "jay11233/appv2-web2"
         DOCKER_REGISTRY_URL = "https://index.docker.io/v1/"
         GITHUB_CREDENTIALS = credentials('github-credentials')
-        DOCKER_BUILDX = "${HOME}/.docker/cli-plugins/docker-buildx"
+
 
 
     }
@@ -27,36 +27,42 @@ pipeline {
         }
 
 
-        stage('Install Docker Buildx') {
+        stage('Install Docker Compose') {
                     steps {
                         sh '''
-                        mkdir -p ~/.docker/cli-plugins/
-                        curl -SL https://github.com/docker/buildx/releases/download/v0.8.2/buildx-v0.8.2.linux-amd64 -o ~/.docker/cli-plugins/docker-buildx
-                        chmod +x ~/.docker/cli-plugins/docker-buildx
-                        docker buildx version
+                        curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+                        chmod +x /usr/local/bin/docker-compose
+                        docker-compose --version
                         '''
                     }
                 }
 
 
-        stage('Setup Docker Buildx') {
-                    steps {
-                       sh '${DOCKER_BUILDX} create --use'
-                       sh '${DOCKER_BUILDX} inspect --bootstrap'
-                    }
-        }
 
         stage('Build Docker Image') {
-                    steps {
-                         script {
-                             docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "${DOCKER_HUB_CREDENTIALS}") {
-                             sh "docker ${DOCKER_BUILDX} build --platform linux/amd64,linux/arm64 -t ${DOCKER_IMAGE} . --push"
-                             }
+            steps {
+                script {
 
+                    dockerImage = docker.build("${DOCKER_IMAGE}", ".")
 
-                         }
-                    }
+                }
+            }
         }
+
+
+        stage('Push Docker Image') {
+            steps {
+                script {
+                    docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "${DOCKER_HUB_CREDENTIALS}") {
+
+                        sh "docker push ${DOCKER_IMAGE}"
+
+                    }
+                }
+            }
+        }
+
+
 
 
 
