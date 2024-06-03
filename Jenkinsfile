@@ -31,8 +31,8 @@ pipeline {
                     steps {
                         sh '''
                 curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /tmp/docker-compose
-                chmod +x /tmp/docker-compose
-                mv /tmp/docker-compose /usr/local/bin/docker-compose
+                              chmod +x /tmp/docker-compose
+                              mv /tmp/docker-compose /usr/local/bin/docker-compose
                         docker-compose --version
                         '''
                     }
