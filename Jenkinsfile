@@ -30,9 +30,9 @@ pipeline {
         stage('Install Docker Compose') {
                     steps {
                         sh '''
-                        sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
-                        sudo chmod +x /usr/local/bin/docker-compose
-                        sudo chown jenkins:jenkins /usr/local/bin/docker-compose
+                curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /tmp/docker-compose
+                chmod +x /tmp/docker-compose
+                mv /tmp/docker-compose /usr/local/bin/docker-compose
                         docker-compose --version
                         '''
                     }
