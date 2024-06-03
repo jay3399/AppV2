@@ -33,6 +33,7 @@ pipeline {
                 script {
                     docker.withRegistry("${env.DOCKER_REGISTRY_URL}", "${DOCKER_HUB_CREDENTIALS}") {
                         sh '''
+                        export DOCKER_IMAGE=${DOCKER_IMAGE}
                         docker-compose -f docker-compose_jenkins.yml build
                         docker-compose -f docker-compose_jenkins.yml push
                         '''
