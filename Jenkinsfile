@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         DOCKER_HUB_CREDENTIALS = 'docker-hub-credentials'
-//         SSH_CREDENTIALS = 'ssh-credentials'
         DOCKER_IMAGE = "jay11233/appv2-web2"
         DOCKER_REGISTRY_URL = "https://index.docker.io/v1/"
         GITHUB_CREDENTIALS = credentials('github-credentials')
@@ -49,7 +48,7 @@ pipeline {
             steps {
                 sshagent(['ssh-credentials']) {
                     sh """
-                    ssh -t -o StrictHostKeyChecking=no ec2-user@ec2-18-219-23-12.us-east-2.compute.amazonaws.com << 'EOF'
+                    ssh -t -o StrictHostKeyChecking=no my-ec2 << 'EOF'
                     cd /home/ec2-user
                     docker-compose -f /home/ec2-user/docker-compose.yml down
                     docker-compose -f /home/ec2-user/docker-compose.yml pull web
@@ -63,7 +62,6 @@ EOF
 
     post {
         always {
-//         aa
             cleanWs()
         }
     }
